@@ -21,7 +21,7 @@ build:
   script_env:
     # Limit MAX_JOBS in order to prevent runners from crashing
     - MAX_JOBS=4
-    - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0+PTX
+    #- TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0+PTX
   # Satisfy linter by not having duplicate skip keys
   # pytorch in conda-forge does not support CUDA 11.8 as of v2.5
   skip: true  # [cuda_compiler_version in ("None", "11.8") or (not linux)]
@@ -32,13 +32,13 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('cuda') }}
+    #- {{ compiler('cuda') }}
     #- {{ stdlib('c') }}
     - ninja
     - pytorch           # [build_platform != target_platform]
-    - pytorch =*=cuda*  # [build_platform != target_platform]
+   # - pytorch =*=cuda*  # [build_platform != target_platform]
   host:
-    - cuda-version {{ cuda_compiler_version }}  # same cuda for host and build
+    #- cuda-version {{ cuda_compiler_version }}  # same cuda for host and build
     - cuda-cudart-dev  # [(cuda_compiler_version or "").startswith("12")]
     - libcublas-dev    # [(cuda_compiler_version or "").startswith("12")]
     - libcurand-dev    # [(cuda_compiler_version or "").startswith("12")]
@@ -48,7 +48,7 @@ requirements:
     - pip
     - python
     - pytorch
-    - pytorch =*=cuda*
+    #- pytorch =*=cuda*
     - setuptools
 
 outputs:
@@ -57,10 +57,10 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - {{ compiler('cuda') }}
+       # - {{ compiler('cuda') }}
         #- {{ stdlib('c') }}
       host:
-        - cuda-version {{ cuda_compiler_version }}  # same cuda for host and build
+        #- cuda-version {{ cuda_compiler_version }}  # same cuda for host and build
         - cuda-cudart-dev  # [(cuda_compiler_version or "").startswith("12")]
         - python
         - libtorch         # required until pytorch run_exports libtorch
@@ -69,13 +69,13 @@ outputs:
       run:
         - einops
         - python
-        - pytorch =*=cuda*
+        #- pytorch =*=cuda*
 
     files:
       include:
         - 'lib/python*/site-packages/flash_attn/**'
         - 'lib/python*/site-packages/flash_attn-{{ version }}.dist-info/**'
-        - 'lib/python*/site-packages/flash_attn_2_cuda.cpython-*.so'
+        #- 'lib/python*/site-packages/flash_attn_2_cuda.cpython-*.so'
 
     test:
       imports:
