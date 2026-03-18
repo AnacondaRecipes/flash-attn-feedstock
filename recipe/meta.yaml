@@ -31,7 +31,7 @@ requirements:
     - {{ stdlib('c') }}
     - ninja
     - pytorch           # [build_platform != target_platform]
-    - pytorch * cuda*   # [build_platform != target_platform]
+    - pytorch =*=*cuda*  # [build_platform != target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
@@ -42,7 +42,7 @@ requirements:
     - pip
     - python
     - pytorch
-    - pytorch * cuda*
+    - pytorch =*=*cuda*
     - setuptools
 
 outputs:
@@ -58,11 +58,11 @@ outputs:
         - cuda-cudart-dev
         - python
         - pytorch
-        - pytorch * cuda*
+        - pytorch =*=*cuda*
       run:
         - einops
         - python
-        - pytorch * cuda*
+        - pytorch =*=*cuda*
 
     files:
       include:
@@ -90,7 +90,7 @@ outputs:
         - libcublas-dev
         - python
         - pytorch
-        - pytorch * cuda*
+        - pytorch =*=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
@@ -118,7 +118,7 @@ outputs:
         - cuda-cudart-dev
         - python
         - pytorch
-        - pytorch * cuda*
+        - pytorch =*=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
