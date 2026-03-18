@@ -21,7 +21,7 @@ build:
     # Limit MAX_JOBS in order to prevent runners from crashing
     - MAX_JOBS=4
     - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0;10.0+PTX
-  skip: true  # [cuda_compiler_version == "None" or (not linux)]
+  skip: true  # [cuda_compiler_version == "None" or (not linux64)]
 
 requirements:
   build:
