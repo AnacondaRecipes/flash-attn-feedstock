@@ -1,2 +1,2 @@
-github_actions_labels:
-- cirun-openstack-cpu-xlarge
+cuda_compiler_version:
+  - 12.8

@@ -1,0 +1,2 @@
+# CUDA kernel compilation is slow with MAX_JOBS=4
+task_timeout: 36000  # 10 hours
