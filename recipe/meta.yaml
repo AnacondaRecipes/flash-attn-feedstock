@@ -30,8 +30,8 @@ requirements:
     - {{ compiler('cuda') }}
     - {{ stdlib('c') }}
     - ninja
-    - pytorch           # [build_platform != target_platform]
-    - pytorch =*=*cuda*  # [build_platform != target_platform]
+    - pytorch >=2.9           # [build_platform != target_platform]
+    - pytorch >=2.9=*cuda*   # [build_platform != target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
@@ -42,8 +42,8 @@ requirements:
     - pip
     - pybind11
     - python
-    - pytorch
-    - pytorch =*=*cuda*
+    - pytorch >=2.9
+    - pytorch >=2.9=*cuda*
     - setuptools
 
 outputs:
@@ -58,12 +58,12 @@ outputs:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch >=2.9
+        - pytorch >=2.9=*cuda*
       run:
         - einops
         - python
-        - pytorch =*=*cuda*
+        - pytorch >=2.9=*cuda*
 
     files:
       include:
@@ -90,8 +90,8 @@ outputs:
         - cuda-cudart-dev
         - libcublas-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch >=2.9
+        - pytorch >=2.9=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
@@ -118,8 +118,8 @@ outputs:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch >=2.9
+        - pytorch >=2.9=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
