@@ -40,7 +40,6 @@ requirements:
     - libcusolver-dev
     - libcusparse-dev
     - pip
-    - pybind11
     - python
     - pytorch
     - pytorch =*=*cuda*
