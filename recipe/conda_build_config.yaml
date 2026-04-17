@@ -1,9 +1,3 @@
 cuda_compiler_version:
   - 12.8
   - 13.0
-pytorch:
-  - 2.8
-  - 2.9
-zip_keys:
-  - cuda_compiler_version
-  - pytorch
