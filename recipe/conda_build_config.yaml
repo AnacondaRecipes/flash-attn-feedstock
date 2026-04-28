@@ -1,3 +1,5 @@
+# Override aggregate's [12.9, 13.0]: pytorch 2.10 on pkgs/main ships
+# gpu_cuda128 + gpu_cuda130 builds (no gpu_cuda129), so 12.8 must match.
 cuda_compiler_version:
   - 12.8
   - 13.0
