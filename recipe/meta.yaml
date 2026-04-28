@@ -15,13 +15,13 @@ source:
   - path: setup.py
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
   script_env:
-    # Limit MAX_JOBS in order to prevent runners from crashing
-    - MAX_JOBS=4
-    - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0;10.0+PTX
-  skip: true  # [cuda_compiler_version == "None" or (not linux64)]
+    # MAX_JOBS sets nvcc parallelism; tuned with abs.yaml task_timeout
+    - MAX_JOBS=8
+    - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0;10.0;12.0+PTX
+  skip: true  # [cuda_compiler_version == "None" or (not linux64) or py==314]
 
 requirements:
   build:
@@ -30,8 +30,8 @@ requirements:
     - {{ compiler('cuda') }}
     - {{ stdlib('c') }}
     - ninja
-    - pytorch           # [build_platform != target_platform]
-    - pytorch =*=*cuda*  # [build_platform != target_platform]
+    - pytorch {{ pytorch }}           # [build_platform != target_platform]
+    - pytorch {{ pytorch }}.*=*cuda*  # [build_platform != target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
@@ -42,8 +42,8 @@ requirements:
     - pip
     - pybind11
     - python
-    - pytorch
-    - pytorch =*=*cuda*
+    - pytorch {{ pytorch }}
+    - pytorch {{ pytorch }}.*=*cuda*
     - setuptools
 
 outputs:
@@ -58,12 +58,12 @@ outputs:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch {{ pytorch }}
+        - pytorch {{ pytorch }}.*=*cuda*
       run:
         - einops
         - python
-        - pytorch =*=*cuda*
+        - pytorch {{ pytorch }}.*=*cuda*
 
     files:
       include:
@@ -90,8 +90,8 @@ outputs:
         - cuda-cudart-dev
         - libcublas-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch {{ pytorch }}
+        - pytorch {{ pytorch }}.*=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
@@ -118,8 +118,8 @@ outputs:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
         - python
-        - pytorch
-        - pytorch =*=*cuda*
+        - pytorch {{ pytorch }}
+        - pytorch {{ pytorch }}.*=*cuda*
       run:
         - python
         - {{ pin_subpackage('flash-attn', exact=True) }}
