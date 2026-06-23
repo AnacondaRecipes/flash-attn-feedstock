@@ -15,13 +15,13 @@ source:
   - path: setup.py
 
 build:
-  number: 1
+  number: 2
   script: {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
   script_env:
     # MAX_JOBS sets nvcc parallelism; tuned with abs.yaml task_timeout
     - MAX_JOBS=8
     - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0;10.0;12.0+PTX
-  skip: true  # [cuda_compiler_version == "None" or (not linux64) or py==314]
+  skip: true  # [cuda_compiler_version == "None" or (not linux64)]
 
 requirements:
   build:
@@ -30,8 +30,6 @@ requirements:
     - {{ compiler('cuda') }}
     - {{ stdlib('c') }}
     - ninja
-    - pytorch {{ pytorch }}           # [build_platform != target_platform]
-    - pytorch {{ pytorch }}.*=*cuda*  # [build_platform != target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
@@ -61,6 +59,7 @@ outputs:
         - pytorch {{ pytorch }}
         - pytorch {{ pytorch }}.*=*cuda*
       run:
+        - __cuda
         - einops
         - python
         - pytorch {{ pytorch }}.*=*cuda*
