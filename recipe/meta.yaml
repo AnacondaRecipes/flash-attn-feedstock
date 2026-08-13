@@ -15,7 +15,7 @@ source:
   - path: setup.py
 
 build:
-  number: 2
+  number: 3
   script: {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
   script_env:
     # MAX_JOBS sets nvcc parallelism; tuned with abs.yaml task_timeout
