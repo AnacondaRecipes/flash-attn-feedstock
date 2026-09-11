@@ -1,6 +1,5 @@
-# Override the aggregate CBC's pytorch pin (currently 2.12) so this rebuild
-# links pytorch 2.13 across host/run/test. flash-attn's recipe uses
-# `pytorch {{ pytorch }}`, so this one key repins every occurrence.
-# Remove once the aggregate CBC bumps pytorch to 2.13.
+# Rebuild against pytorch 2.14. flash-attn pins `pytorch {{ pytorch }}`, so this
+# one key repins every occurrence (host/run/test). Matches the aggregate CBC's
+# current pytorch pin; keep in lockstep and bump on each pytorch rebuild.
 pytorch:
-  - '2.13'
+  - '2.14'
