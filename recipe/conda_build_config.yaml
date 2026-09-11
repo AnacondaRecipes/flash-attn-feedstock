@@ -1,5 +1,0 @@
-# Rebuild against pytorch 2.14. flash-attn pins `pytorch {{ pytorch }}`, so this
-# one key repins every occurrence (host/run/test). Matches the aggregate CBC's
-# current pytorch pin; keep in lockstep and bump on each pytorch rebuild.
-pytorch:
-  - '2.14'
