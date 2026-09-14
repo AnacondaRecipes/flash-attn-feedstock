@@ -15,7 +15,7 @@ source:
   - path: setup.py
 
 build:
-  number: 3
+  number: 4
   script: {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
   script_env:
     # MAX_JOBS sets nvcc parallelism; tuned with abs.yaml task_timeout
@@ -39,6 +39,9 @@ requirements:
     - libcusparse-dev
     - pip
     - pybind11
+    # flash_api.cpp uses PYBIND11_MODULE; lock the ABI to match pytorch's
+    # vendored pybind11 (both resolve to 3.0.4 / abi 11 on pkgs/main).
+    - pybind11-abi ==11
     - python
     - pytorch {{ pytorch }}
     - pytorch {{ pytorch }}.*=*cuda*
