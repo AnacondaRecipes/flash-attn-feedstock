@@ -1,0 +1,5 @@
+# Rebuild against pytorch 2.15. flash-attn pins `pytorch {{ pytorch }}`, so this
+# one key repins every occurrence (host/run/test). The aggregate CBC still pins
+# 2.14; drop this file once the aggregate moves to 2.15.
+pytorch:
+  - '2.15'
