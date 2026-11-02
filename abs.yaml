@@ -1,4 +1,4 @@
-# CUDA kernel compilation is slow with MAX_JOBS=4
+# CUDA kernel compilation takes ~4-4.7 h per variant at MAX_JOBS=8
 task_timeout: 36000  # 10 hours
 
 # Opt into the experimental Python 3.15 variant. Gated in the aggregate

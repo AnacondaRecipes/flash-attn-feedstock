@@ -2,9 +2,7 @@
 
 package:
   name: flash-attn-split
-  # Strip ".postX" from version number because these just indicate wheel rebuilds and
-  # are not relevant to conda builds
-  version: {{ version.split('.')[:3] | join('.') }}
+  version: {{ version }}
 
 source:
   # Use PYPI sdist instead of GitHub because they include a specific vendored CUTLASS
@@ -15,12 +13,17 @@ source:
   - path: setup.py
 
 build:
-  number: 5
-  script: {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
+  number: 0
+  script:
+    - {{ PYTHON }} -m pip install . -vvv --no-deps --no-build-isolation
+    # Non-fatal: slowest compile jobs (seconds) and per-extension job-seconds from each .ninja_log
+    - for log in $(find build -name .ninja_log); do echo "== $log"; awk 'NR>1{d=($2-$1)/1000; t+=d; print d, $4} END{print t, "TOTAL_JOB_SECONDS"}' "$log" | sort -rn | head -15; done || true
   script_env:
     # MAX_JOBS sets nvcc parallelism; tuned with abs.yaml task_timeout
     - MAX_JOBS=8
     - TORCH_CUDA_ARCH_LIST=8.0;8.6;8.9;9.0;10.0;12.0+PTX
+    # Per-step progress and elapsed time in the ninja output
+    - "NINJA_STATUS=[%f/%t %es] "
   # pytorch 2.15 has no py3.10 builds on pkgs/main
   skip: true  # [py<311 or cuda_compiler_version == "None" or (not linux64)]
 
