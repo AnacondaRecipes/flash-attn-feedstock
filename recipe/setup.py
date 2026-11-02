@@ -17,6 +17,14 @@ from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 _this_dir = pathlib.Path(__file__).parent.absolute()
 
+# Link libpython only where the interpreter ships it. pkgs/main python 3.15 is a
+# static interpreter with no libpython*.so (its sysconfig still claims a shared
+# build), so its extensions must leave Python symbols for the executable to resolve.
+_pyver = f"{sys.version_info[0]}.{sys.version_info[1]}"
+_has_libpython = pathlib.Path(sys.prefix, "lib", f"libpython{_pyver}.so").exists()
+_python_libs = [f"python{_pyver}"] if _has_libpython else []
+_link_args = ["-Wl,--strip-all"] + (["-Wl,--no-undefined"] if _has_libpython else [])
+
 setup(
     packages=find_packages(
         include=["flash_attn*"],
@@ -122,7 +130,7 @@ setup(
                     # "-DFLASHATTENTION_DISABLE_LOCAL",
                 ],
             },
-            extra_link_args=["-Wl,--strip-all", "-Wl,--no-undefined"],
+            extra_link_args=_link_args,
             include_dirs=[
                 _this_dir / "csrc" / "flash_attn",
                 _this_dir / "csrc" / "flash_attn" / "src",
@@ -130,8 +138,7 @@ setup(
             ],
             libraries=[
                 "cudart",
-                f"python{sys.version_info[0]}.{sys.version_info[1]}",
-            ],
+            ] + _python_libs,
         ),
         CUDAExtension(
             name="fused_dense_lib",
@@ -145,13 +152,12 @@ setup(
                 ],
                 "nvcc": ["-O3"],
             },
-            extra_link_args=["-Wl,--strip-all", "-Wl,--no-undefined"],
+            extra_link_args=_link_args,
             libraries=[
                 "cudart",
                 "cublas",
                 "cublasLt",
-                f"python{sys.version_info[0]}.{sys.version_info[1]}",
-            ],
+            ] + _python_libs,
         ),
         CUDAExtension(
             name="dropout_layer_norm",
@@ -229,14 +235,13 @@ setup(
                     "--use_fast_math",
                 ],
             },
-            extra_link_args=["-Wl,--strip-all", "-Wl,--no-undefined"],
+            extra_link_args=_link_args,
             include_dirs=[
                 _this_dir / "csrc" / "layer_norm",
             ],
             libraries=[
                 "cudart",
-                f"python{sys.version_info[0]}.{sys.version_info[1]}",
-            ],
+            ] + _python_libs,
         ),
     ],
     cmdclass={"build_ext": BuildExtension},
